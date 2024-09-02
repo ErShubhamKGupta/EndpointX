@@ -43,24 +43,37 @@ namespace EndpointX.Controllers
             return employee;
         }
 
-        // GET: api/Employee/user@example.com
-        [HttpGet("{emailID}")]
-        public async Task<ActionResult<Employee>> GetEmployeeByEmailId(string emailID)
+        // GET: api/Employee/search?employeeCode=12345&email=johndoe@example.com
+        [HttpGet("search")]
+        public async Task<ActionResult<Employee>> GetEmployeeByEmailIdOrEmpCode(string emailID = null, string empCode = null)
         {
-            _logger.LogInformation("Getting employee with email id {emailID}", emailID);
-            if (string.IsNullOrWhiteSpace(emailID))
+            _logger.LogInformation("Getting employee with email id {emailID} or employee code", emailID, empCode);
+
+            if (string.IsNullOrEmpty(emailID) && string.IsNullOrEmpty(empCode))
             {
-                return BadRequest("Email is required.");
+                return BadRequest("Either employeeCode or email id must be provided.");
             }
-            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Email == emailID);
+
+            Employee employee = null;
+
+            if (!string.IsNullOrEmpty(empCode))
+            {
+                employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeCode == empCode);
+            }
+
+            if (employee == null && !string.IsNullOrEmpty(emailID))
+            {
+                employee = await _context.Employees.FirstOrDefaultAsync(e => e.Email == emailID);
+            }
 
             if (employee == null)
             {
-                _logger.LogWarning("Employee with Email ID {Id} not found", emailID);
+                _logger.LogWarning("Employee with code {EmployeeCode} or email {Email} not found.", empCode, emailID);
                 return NotFound();
             }
 
-            return employee;
+            _logger.LogInformation("Retrieved employee with code {EmployeeCode} or email {Email}.", empCode, emailID);
+            return Ok(employee);
         }
 
         // POST: api/Employee
