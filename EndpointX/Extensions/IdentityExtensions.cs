@@ -45,6 +45,8 @@ namespace EndpointX.Extensions
                 y.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
                     IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(
                                 config["AppSettings:JWTSecretKey"]!))

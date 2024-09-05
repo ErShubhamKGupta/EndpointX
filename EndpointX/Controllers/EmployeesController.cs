@@ -1,6 +1,7 @@
 ﻿using EndpointX.Models;
 using EndpointX.Models.Data;
 using EndpointX.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace EndpointX.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmployeesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
