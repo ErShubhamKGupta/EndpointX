@@ -45,10 +45,11 @@ namespace EndpointX.Controllers
             if (user != null && await userManager.CheckPasswordAsync(user, loginModel.Password))
             {
                 var signInKey = new SymmetricSecurityKey(
-                                Encoding.UTF8.GetBytes(appSettings.Value.JWTSecretKey)
-                                );
+                                Encoding.UTF8.GetBytes(appSettings.Value.JWTSecretKey));
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
+                    Audience = appSettings.Value.Audience,
+                    Issuer = appSettings.Value.Issuer,
                     Subject = new ClaimsIdentity(
                     [
                         new("UserID",user.Id.ToString())
