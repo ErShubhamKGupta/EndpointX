@@ -41,12 +41,14 @@ namespace EndpointX.Extensions
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(y =>
             {
-                y.SaveToken = false;
+                y.SaveToken = true;
                 y.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    ValidateAudience = false,
-                    ValidateIssuer = false,
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidAudience = config["AppSettings:Audience"],
+                    ValidIssuer = config["AppSettings:Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(
                                 config["AppSettings:JWTSecretKey"]!))
