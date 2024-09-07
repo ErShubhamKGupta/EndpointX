@@ -1,5 +1,4 @@
 ﻿using EndpointX.Models.Data;
-using EndpointX.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EndpointX.Extensions

@@ -154,10 +154,6 @@ namespace EndpointX.Controllers
 
             return NoContent();
         }
-        private bool EmployeeExists(Guid id)
-        {
-            return _context.Employees.Any(e => e.Id == id);
-        }
 
     }
 }
