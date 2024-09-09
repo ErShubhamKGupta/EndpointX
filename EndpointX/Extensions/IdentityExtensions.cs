@@ -12,8 +12,8 @@ namespace EndpointX.Extensions
         public static IServiceCollection AddIdentityHandlersAndStores(this IServiceCollection services)
         {
             services.AddAuthorization();
-            services.AddIdentity<ApplicationUser, IdentityRole>();
             services.AddIdentityApiEndpoints<ApplicationUser>()
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>();
 
             return services;
