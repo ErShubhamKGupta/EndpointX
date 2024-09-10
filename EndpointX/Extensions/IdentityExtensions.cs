@@ -23,6 +23,7 @@ namespace EndpointX.Extensions
         {
             services.Configure<IdentityOptions>(options =>
             {
+                options.Password.RequiredLength = 8;
                 options.Password.RequireDigit = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
