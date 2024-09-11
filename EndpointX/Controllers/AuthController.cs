@@ -1,10 +1,8 @@
 ﻿using EndpointX.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -101,28 +99,26 @@ namespace EndpointX.Controllers
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
             }
 
-            var token = GenerateJwtToken(authClaims);
+            var token = GenerateJwtToken(authClaims, appSettings);
 
             return Ok(token);
 
         }
 
-        private string GenerateJwtToken(List<Claim> claims)
+        private string GenerateJwtToken(List<Claim> claims, IOptions<AppSettings>? appSettings)
         {
-            //var signInKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["AppSettings:JWTSecretKey"]!));
+            var signInKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.Value.JWTSecretKey));
 
-            //var tokenObj = new JwtSecurityToken(
-            //         issuer: _config["AppSettings:Issuer"],
-            //         audience: _config["AppSettings:Audience"],
-            //         claims: claims,
-            //         expires: DateTime.UtcNow.AddMinutes(30),
-            //         signingCredentials = new SigningCredentials(signInKey, SecurityAlgorithms.HmacSha256Signature)
+            var tokenObj = new JwtSecurityToken(
+                     issuer: appSettings.Value.Issuer,
+                     audience: appSettings.Value.Audience,
+                     claims: claims,
+                     expires: DateTime.UtcNow.AddMinutes(30),
+                     signingCredentials: new SigningCredentials(signInKey, SecurityAlgorithms.HmacSha256Signature)
 
-            //    );
-
-
-            //string token = new JwtSecurityTokenHandler().WriteToken(tokenObj);
-            return "Token";
+                );
+            string token = new JwtSecurityTokenHandler().WriteToken(tokenObj);
+            return token;
 
         }
 
